@@ -16,11 +16,10 @@
 #define ACCELEROMETER_Y A2
 #define ACCELEROMETER_Z A3
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C address, 16 column and 2 rows
-
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 TinyGPSPlus gps;
-SoftwareSerial gpsSerial(GPS_TX, GPS_RX); // RX, TX for GPS
-SoftwareSerial gsmSerial(GSM_TX, GSM_RX); // RX, TX for GSM
+SoftwareSerial gpsSerial(GPS_TX, GPS_RX);
+SoftwareSerial gsmSerial(GSM_TX, GSM_RX);
 
 void setup() {
   Serial.begin(9600);
@@ -34,17 +33,11 @@ void setup() {
 }
 
 void loop() {
-  // Your main code logic here
-
-  // Example: Read GPS data
   while (gpsSerial.available() > 0) {
     if (gps.encode(gpsSerial.read())) {
-      // Process GPS data
       float latitude = gps.location.lat();
       float longitude = gps.location.lng();
       updateLCD("Lat: " + String(latitude, 6), "Lon: " + String(longitude, 6));
-
-      // Example: Check for an accident
       if (isAccident()) {
         sendEmergencyAlert(latitude, longitude);
         activateAlarm();
@@ -52,8 +45,6 @@ void loop() {
       }
     }
   }
-
-  // Additional logic for other sensors and modules
 }
 
 void updateLCD(String line1, String line2) {
@@ -64,18 +55,13 @@ void updateLCD(String line1, String line2) {
   lcd.print(line2);
 }
 
-void sendEmergencyAlert(float lat, float lon) {
-  // Use GSM module to send message with location information
-  // Implement your specific GSM module communication here
-}
+void sendEmergencyAlert(float lat, float lon) {}
 
 void activateAlarm() {
-  // Turn on the buzzer for audible alert
   digitalWrite(BUZZER_PIN, HIGH);
 }
 
 void blinkLights() {
-  // Blink LEDs for visual alert
   digitalWrite(LED_PIN, HIGH);
   delay(500);
   digitalWrite(LED_PIN, LOW);
@@ -83,7 +69,5 @@ void blinkLights() {
 }
 
 bool isAccident() {
-  // Implement your accident detection logic based on sensor readings
-  // For example, using accelerometer, gas sensor, etc.
-  return false; // Placeholder, replace with your logic
+  return false;
 }
